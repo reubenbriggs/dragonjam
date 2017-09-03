@@ -1,8 +1,13 @@
 /[Ll]ibrary/
+/[Dd]ragon [Jj]am/[Ll]ibrary/
 /[Tt]emp/
+/Dragon Jam/[Tt]emp/
 /[Oo]bj/
+/Dragon Jam/[Oo]bj/
 /[Bb]uild/
+/Dragon Jam/[Bb]uild/
 /[Bb]uilds/
+/Dragon Jam/[Bb]uilds
 /Assets/AssetStoreTools*
 
 # Visual Studio 2015 cache directory

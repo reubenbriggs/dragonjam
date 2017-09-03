@@ -54,7 +54,7 @@ public class InputHandler : MonoBehaviour
         if (Input.touchCount > 0)
             lastTouch = Input.GetTouch(0);
         if (Input.touchCount == 0 && dragging) {
-            onDrag(lastTouch.position - startPosition);
+            onDrag(lastTouch.position - (Vector2)startPosition);
             dragging = false;
         }
 #endif

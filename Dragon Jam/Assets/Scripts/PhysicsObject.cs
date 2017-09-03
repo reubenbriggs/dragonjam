@@ -6,6 +6,8 @@ public class PhysicsObject : MonoBehaviour {
 
     [SerializeField]
     private float maxSpeed;
+    [SerializeField]
+    protected bool useGravity;
     private Vector3 force;
 
 	// Use this for initialization
@@ -16,6 +18,9 @@ public class PhysicsObject : MonoBehaviour {
 	// Update is called once per frame
 	protected void Update () {
         force = Vector3.ClampMagnitude(force, maxSpeed);
+        if (useGravity) {
+            force.y -= PhysicsManager.GravityValue * Time.deltaTime;
+        }
         transform.position += force * Time.deltaTime;
 	}
 
