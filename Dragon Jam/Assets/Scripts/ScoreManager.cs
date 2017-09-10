@@ -23,4 +23,8 @@ public class ScoreManager {
             score = value;
         }
     }
+
+    public void ResetScore() {
+        score = 0;
+    }
 }

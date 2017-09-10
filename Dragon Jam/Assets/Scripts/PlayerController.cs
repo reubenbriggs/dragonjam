@@ -13,16 +13,16 @@ public class PlayerController : PhysicsObject
     // Use this for initialization
     void Start() {
         InputHandler.Instance.onDrag = OnDrag;
+        GameManager.Instance.OnStateChange += OnStateChange;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
-    new void Update() {
-        base.Update();
+    void Update() {
 
         ScoreManager.Instance.UpdateScore(transform.position.y);
-        if (!GeometryUtility.TestPlanesAABB(GeometryUtility.CalculateFrustumPlanes(Camera.main),spriteRenderer.bounds)) {
-            //Do Death Stuff
+        if (!GeometryUtility.TestPlanesAABB(GeometryUtility.CalculateFrustumPlanes(Camera.main), spriteRenderer.bounds)) {
+            GameManager.Instance.GameOver();
         }
         Vector3 dir = transform.position - previousPosition;
         if (dir != Vector3.zero) {
@@ -33,10 +33,17 @@ public class PlayerController : PhysicsObject
     }
 
     void OnDrag(Vector3 forceToAdd) {
-        if (inWater) {
+        if (inWater && canMove) {
             dragged = true;
             AddForce(forceToAdd);
         }
+    }
+
+    void OnStateChange(GameState current) {
+        if (current == GameState.Playing)
+            canMove = true;
+        else
+            canMove = false;
     }
 
     void OnTriggerEnter(Collider other) {
@@ -44,7 +51,12 @@ public class PlayerController : PhysicsObject
             inWater = true;
             useGravity = false;
             ResetForce();
-            StartCoroutine(MoveToCentre(other.transform.position, 2f));
+            StartCoroutine(MoveToCentre(other.transform, 2f));
+
+            MovingObject movingBubble = other.GetComponent<MovingObject>();
+            if (movingBubble) {
+                movingBubble.OnMovement += Move;
+            }
         }
     }
 
@@ -53,16 +65,22 @@ public class PlayerController : PhysicsObject
             inWater = false;
             useGravity = true;
             dragged = false;
+
+            MovingObject movingBubble = other.GetComponent<MovingObject>();
+            if (movingBubble) {
+                movingBubble.OnMovement -= Move;
+            }
         }
     }
 
-    IEnumerator MoveToCentre(Vector3 targetPosition, float time) {
+    IEnumerator MoveToCentre(Transform target, float time) {
         float t = time;
         while (t > 0 && !dragged) {
-            transform.position = Vector3.Lerp(transform.position, targetPosition, (time - t) / time);
+            transform.position = Vector3.Lerp(transform.position, target.position, (time - t) / time);
             t -= Time.deltaTime;
             yield return null;
         }
         dragged = false;
     }
+
 }

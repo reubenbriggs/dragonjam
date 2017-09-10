@@ -6,13 +6,12 @@ using UnityEngine;
 public class CameraController : MonoBehaviour {
 
     [SerializeField]
-    private float offset;
-    [SerializeField]
     private float followRate;
     [SerializeField]
     private Transform target;
 
     private float minY;
+    private float offset;
     private Camera cam;
 
 	// Use this for initialization
@@ -32,7 +31,7 @@ public class CameraController : MonoBehaviour {
         pos.y = Mathf.Lerp(transform.position.y, target.position.y + offset, (1 / followRate) * Time.deltaTime);
         if (pos.y > minY)
             minY = pos.y;
-        pos.y = Mathf.Max(pos.y, minY - 0.5f);
+        pos.y = Mathf.Max(pos.y, minY - 1f);
         transform.position = pos;
 	}
 }

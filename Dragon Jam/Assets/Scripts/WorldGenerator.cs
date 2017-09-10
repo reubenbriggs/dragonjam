@@ -35,6 +35,7 @@ public class WorldGenerator : MonoBehaviour
     private float startPosition = -4;
     private int chunksToPrewarm = 5;
     private float lastSpawnedHeight;
+    private int? lastChunkSpawnedIndex;
 
     // Use this for initialization
     void Start() {
@@ -51,9 +52,13 @@ public class WorldGenerator : MonoBehaviour
 
     private void SpawnChunks(int numberToSpawn) {
         UpdateCurrentChunks();
-
+        int? chunkIndexToSpawn = null;
         for (int i = 0; i < numberToSpawn; i++) {
-            MapChunk toSpawn = currentChunks[Random.Range(0, currentChunks.Count)];
+            while(chunkIndexToSpawn == null || chunkIndexToSpawn == lastChunkSpawnedIndex) {
+                chunkIndexToSpawn = Random.Range(0, currentChunks.Count);
+            }
+            MapChunk toSpawn = currentChunks[chunkIndexToSpawn.Value];
+            lastChunkSpawnedIndex = chunkIndexToSpawn;
             GameObject spawned = Instantiate(toSpawn.chunkObject, mapParent, true);
             Vector3 pos = spawned.transform.position;
             pos.y = lastSpawnedHeight + Random.Range(minSpacing, maxSpacing) + toSpawn.chunkLength / 2;
