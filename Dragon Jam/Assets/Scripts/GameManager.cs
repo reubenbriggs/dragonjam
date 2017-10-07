@@ -48,6 +48,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update() {
         if (currentState != previousState) {
+            if (currentState == GameState.Paused)
+                Time.timeScale = 0;
+            else
+                Time.timeScale = 1;
             if (OnStateChange != null)
                 OnStateChange(currentState);
         }

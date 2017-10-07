@@ -32,6 +32,8 @@ public class WorldGenerator : MonoBehaviour
     private float minSpacing, maxSpacing;
     [SerializeField]
     private Transform mapParent;
+    [SerializeField]
+    private bool useMaxHeight;
     private float startPosition = -4;
     private int chunksToPrewarm = 5;
     private float lastSpawnedHeight;
@@ -71,7 +73,7 @@ public class WorldGenerator : MonoBehaviour
     private void UpdateCurrentChunks() {
         currentChunks = new List<MapChunk>();
         foreach (MapChunk chunk in chunks) {
-            if (chunk.minHeight < lastSpawnedHeight && chunk.maxHeight > lastSpawnedHeight) {
+            if (chunk.minHeight < lastSpawnedHeight && (!useMaxHeight || chunk.maxHeight > lastSpawnedHeight)) {
                 currentChunks.Add(chunk);
             }
         }

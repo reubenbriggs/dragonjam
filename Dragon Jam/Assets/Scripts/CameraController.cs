@@ -25,10 +25,10 @@ public class CameraController : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         offset = cam.orthographicSize / 2;
         Vector3 pos = transform.position;
-        pos.y = Mathf.Lerp(transform.position.y, target.position.y + offset, (1 / followRate) * Time.deltaTime);
+        pos.y = Mathf.Lerp(transform.position.y, target.position.y + offset, (1 / followRate) * Time.fixedDeltaTime);
         if (pos.y > minY)
             minY = pos.y;
         pos.y = Mathf.Max(pos.y, minY - 1f);

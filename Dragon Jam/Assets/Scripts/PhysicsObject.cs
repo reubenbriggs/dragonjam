@@ -18,12 +18,13 @@ public class PhysicsObject : MonoBehaviour {
 
     // Update is called once per frame
     protected void FixedUpdate () {
-        force = Vector3.ClampMagnitude(force, maxSpeed);
-        if (useGravity) {
-            force.y -= PhysicsManager.GravityValue * Time.fixedDeltaTime;
-        }
-        if(canMove)
+        if (canMove) {
+            force = Vector3.ClampMagnitude(force, maxSpeed);
+            if (useGravity) {
+                force.y -= PhysicsManager.GravityValue * Time.fixedDeltaTime;
+            }
             transform.position += force * Time.fixedDeltaTime;
+        }
 	}
 
     public void ResetForce() {

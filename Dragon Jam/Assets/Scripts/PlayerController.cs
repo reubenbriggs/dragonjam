@@ -9,12 +9,16 @@ public class PlayerController : PhysicsObject
     private bool dragged;
     private Vector3 previousPosition;
     private SpriteRenderer spriteRenderer;
+    private AudioSource source;
+    private float delay = 0.3f;
+    private float lastPlayedTime;
 
     // Use this for initialization
     void Start() {
         InputHandler.Instance.onDrag = OnDrag;
         GameManager.Instance.OnStateChange += OnStateChange;
         spriteRenderer = GetComponent<SpriteRenderer>();
+        source = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -36,6 +40,11 @@ public class PlayerController : PhysicsObject
         if (inWater && canMove) {
             dragged = true;
             AddForce(forceToAdd);
+            if (lastPlayedTime + delay < Time.time && AudioManager.Instance.AudioEnabled) {
+                source.pitch = Random.Range(0.6f, 1.2f);
+                source.Play();
+                lastPlayedTime = Time.time;
+            }
         }
     }
 
